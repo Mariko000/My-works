@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import router from './router' 
+import './registerServiceWorker'
 
 // 1. まずアプリのインスタンスを作成して、変数「app」に入れる
 const app = createApp(App)
