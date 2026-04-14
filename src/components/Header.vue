@@ -11,9 +11,9 @@
     </div>
 
     <nav class="nav-links">
-      <router-link to='/Projects' class="nav-item">Art Projects</router-link>
+      <router-link to='/' class="nav-item">Art Projects</router-link>
       <router-link to='/Works' class="nav-item">Art Pieces</router-link>
-      <router-link to='/' class="nav-item">Featured</router-link>
+      <router-link to='/Featured' class="nav-item">Featured</router-link>
       <router-link to="/about" class="nav-item">About</router-link>
       <router-link to='/Apps' class="nav-item">My Apps</router-link>
       <router-link to='/Contact' class="nav-item">Contact</router-link>

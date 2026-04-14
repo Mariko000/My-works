@@ -5,6 +5,9 @@ import img4 from '@/assets/Projects/Vinyl_Autumn.png'
 import img5 from '@/assets/Projects/Vinyl_winter.png'
 import img6 from '@/assets/Projects/Flag Mockup.png'
 import img7 from '@/assets/Projects/Book_with_belly_Mockup2_copy (1).png'
+import img8 from '@/assets/Projects/Glass-Juice-Bottle.png'
+import img9 from '@/assets/Projects/Paper-Bag.png'
+import img10 from '@/assets/Projects/Hanging_T-Shirt.png'
 
 export const projects = [
   {
@@ -62,5 +65,29 @@ export const projects = [
     link: 'https://www.behance.net/gallery/246323955/Yoga-Lifestyle-Branding-%28magazine-and-yoga-mat%29',
     image: img7,
     stack: 'Photoshop'
-  }
+  },
+  {
+    id: 8,
+    title: 'Organic Juice - Bottle Label',
+    description: '果実の断面を抽象化した、ミニマルな飲料ラベルデザイン',
+    // link: 'https://www.behance.net/gallery/246323955/Yoga-Lifestyle-Branding-%28magazine-and-yoga-mat%29',
+    image: img8,
+    stack: 'Photoshop'
+  },
+  {
+    id: 9,
+    title: 'Paper Bag Design Project',
+    description: 'ミニマリズムを意識したモダンなデザイン',
+    // link: 'https://www.behance.net/gallery/246323955/Yoga-Lifestyle-Branding-%28magazine-and-yoga-mat%29',
+    image: img9,
+    stack: 'Photoshop'
+  },
+  {
+    id: 10,
+    title: 'T-shirt Design Project',
+    description: 'テキスタイルへの展開例。幾何学模様を用いたアパレルデザイン',
+    // link: 'https://www.behance.net/gallery/246323955/Yoga-Lifestyle-Branding-%28magazine-and-yoga-mat%29',
+    image: img10,
+    stack: 'Photoshop'
+  },
 ]

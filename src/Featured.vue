@@ -10,6 +10,8 @@ const apps = computed(() => featured.filter(item => item.type === 'app'))
 </script>
 
 <template>
+
+
   <main class="portfolio-container">
     <h3>Pick up</h3>
     
@@ -49,6 +51,9 @@ const apps = computed(() => featured.filter(item => item.type === 'app'))
 </template>
 
 <style scoped>
+
+
+
 .portfolio-container {
   max-width: 1200px;
   margin: 0 auto;

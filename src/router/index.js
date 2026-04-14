@@ -8,9 +8,9 @@ import Featured from '../Featured.vue'
 import Projects from '../Projects.vue'
 
 const routes = [
-  { path: '/Projects', component: Projects, meta: { index: 1 } },
+  { path: '/', component: Projects, meta: { index: 1 } },
   { path: '/Works', component: Works, meta: { index: 2 } },
-  { path: '/', component: Featured, meta: { index: 3 } },
+  { path: '/Featured', component: Featured, meta: { index: 3 } },
   { path: '/about', component: About, meta: { index: 4 } },
   { path: '/Apps', component: Apps, meta: { index: 5 } },
   { path: '/Contact', component: Contact, meta: { index: 6 } },
