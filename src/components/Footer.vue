@@ -5,8 +5,18 @@
 <template>
     <footer class="site-footer">
       <p>2026-rutenVeil</p>
-      <p><a href="#" target="_blank">Instagram</a></p>
-      <p><a href="https://www.behance.net/" target="_blank">Behance</a></p>
+      <a href="https://www.instagram.com/rutenveil/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-square-instagram"></i>
+      </a>
+      
+      <a href="https://www.behance.net/rutenveil" target="_blank" rel="noopener">
+        <i class="fa-brands fa-square-behance"></i>
+      </a>
+
+      <a href="mailto:rutenveil@gmail.com" rel="noopener">
+      <i class="fa-solid fa-envelope"></i>
+      </a>
+
     </footer>
 </template>
 
