@@ -48,6 +48,15 @@
   opacity: 0.5;
 }
 
+.footer i {
+  font-size: 30px;
+}
+
+.footer a {
+  padding: 8px;
+  display: inline-block;
+}
+
 /* レスポンシブ：画面が狭いときは縦並びにする場合 */
 @media (max-width: 600px) {
   .site-footer {
