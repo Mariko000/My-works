@@ -6,6 +6,9 @@ import Contact from '../Contact.vue'
 import WorkDetail from '../WorkDetail.vue'
 import Featured from '../Featured.vue'
 import Projects from '../Projects.vue'
+import ECsite from '../EC.vue'
+import ChatWindow from '../components/ChatWindow.vue'
+
 
 const routes = [
   { path: '/', component: Projects, meta: { index: 1 } },
@@ -15,6 +18,8 @@ const routes = [
   { path: '/Apps', component: Apps, meta: { index: 5 } },
   { path: '/Contact', component: Contact, meta: { index: 6 } },
   { path: '/works/:id', component: WorkDetail, meta: { index: 7 } },
+  { path: '/EC', component: ECsite, meta: { index: 8 } },
+  { path: '/Chat', component: ChatWindow, meta: { index: 9 } },
 ]
 
 const router = createRouter({

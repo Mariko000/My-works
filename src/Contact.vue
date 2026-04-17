@@ -3,12 +3,19 @@
       <div class="contact-inner">
         <h2 class="contact-title">Contact</h2>
         <p class="contact-lead">制作のご相談などお気軽にご連絡ください。</p>
+
+        <p v-if="success" class="success-message">
+          送信が完了しました。<br>
+          通常1〜2営業日以内にご返信いたします。
+        </p>
   
         <form class="contact-form" @submit.prevent="sendEmail">
           <div class="form-row">
             <input v-model="name" type="text" placeholder="お名前" required />
             <input v-model="email" type="email" placeholder="メールアドレス" required />
           </div>
+
+
   
           <textarea
             v-model="message"
@@ -19,6 +26,13 @@
   
           <button type="submit">送信する</button>
         </form>
+
+
+
+       <p v-if="errorMsg" class="error-message">
+        {{ errorMsg }}
+       </p>
+
       </div>
     </section>
   </template>
@@ -31,6 +45,9 @@
   const email = ref("");
   const message = ref("");
   
+  const success = ref(false);
+  const errorMsg = ref("");
+  
   const sendEmail = () => {
     const templateParams = {
       from_name: name.value,
@@ -39,19 +56,22 @@
     };
   
     emailjs.send(
-  import.meta.env.VITE_EMAILJS_SERVICE,
-  import.meta.env.VITE_EMAILJS_TEMPLATE,
-  templateParams,
-  import.meta.env.VITE_EMAILJS_PUBLIC
-)
+      import.meta.env.VITE_EMAILJS_SERVICE,
+      import.meta.env.VITE_EMAILJS_TEMPLATE,
+      templateParams,
+      import.meta.env.VITE_EMAILJS_PUBLIC
+    )
     .then(() => {
-      alert("送信しました！");
+      success.value = true;
+      errorMsg.value = "";
+  
       name.value = "";
       email.value = "";
       message.value = "";
     })
     .catch((error) => {
-      alert("送信失敗");
+      errorMsg.value = "送信に失敗しました。時間をおいて再度お試しください。";
+      success.value = false;
       console.error(error);
     });
   };
@@ -128,10 +148,24 @@
   button:hover {
     background: #333;
   }
+
+  .success-message {
+  margin-top: 16px;
+  color: #2a7a2a;
+  font-size: 14px;
+}
+
+.error-message {
+  margin-top: 16px;
+  color: #c0392b;
+  font-size: 14px;
+}
   
   @media (max-width: 640px) {
     .form-row {
       grid-template-columns: 1fr;
     }
   }
+
+  
   </style>

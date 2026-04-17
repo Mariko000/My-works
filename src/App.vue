@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import ChatWindow from './components/ChatWindow.vue';
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 
@@ -106,6 +107,7 @@ router.beforeEach((to, from) => {
 </script>
 
 <template>
+  <div class="page-wrapper">
   <Header />
   <div 
     v-if="showBird" 
@@ -121,7 +123,8 @@ router.beforeEach((to, from) => {
       <component :is="Component" />
     </transition>
   </router-view>
-
+  <ChatWindow />
+</div>
   <Footer />
 </template>
 
@@ -146,6 +149,20 @@ html {
   height: auto;
   /* 画像を左右反転させて、デフォルトで右向きにする */
   transform: scaleX(-1);
+}
+
+/* 余計な背景や線は入れず、ただ内側に寄せる */
+.page-wrapper {
+  padding: 2% 4%; /* 上下 2% / 左右 4% ほど空けると「じゃっかん」小さく見えます */
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* モバイルでは余白が邪魔になるので、少し狭める調整 */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 10px;
+  }
 }
 
 /* スライドのアニメーション定義 */
