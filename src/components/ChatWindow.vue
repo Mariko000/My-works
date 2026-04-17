@@ -1,29 +1,33 @@
-<!-- チャット窓 -->
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue'; // computedを追加
+import { chatAd } from '@/data/chat-ad.js'; // 広告データをインポート
 
 const isOpen = ref(false);
 const messages = ref([]);
 const showOptions = ref(false);
 
+// 現在表示する広告のIDを管理 (デフォルトは 1: 食品アプリ)
+const currentAdId = ref(1);
+
+// 現在の広告オブジェクトを計算
+const currentAd = computed(() => {
+  return chatAd.find(ad => ad.id === currentAdId.value) || chatAd[0];
+});
+
 // 初期メッセージの送信
 const startChat = () => {
   messages.value = [];
+  // チャットを開き直したときは広告をデフォルトに戻す設定にしてもOK
+  currentAdId.value = 1; 
   addMessage('bot', 'こんにちは！RutenVeilへようこそ。何かお手伝いしましょうか？');
   setTimeout(() => {
     showOptions.value = true;
   }, 800);
 };
 
-
-// チャット内のメッセージにリンクを入れる場合、通常のテキストとして扱うと router-link（HTMLタグ）がそのまま文字列として表示されてしまいます。
-// これを解決するには、メッセージのデータ構造に「リンクがあるかどうか」を持たせて、テンプレート側で出し分けるのがスマートです。
-// リンク先のパス（link）も扱えるように拡張
-// 複数のリンクを扱えるように links を配列で受ける
 const addMessage = (sender, text, links = []) => {
   messages.value.push({ sender, text, links });
 };
-
 
 const handleOption = (option) => {
   showOptions.value = false;
@@ -31,14 +35,17 @@ const handleOption = (option) => {
 
   setTimeout(() => {
     if (option.value === 'works') {
-      // ここで分岐！2つのリンクを配列で渡す
+      currentAdId.value = 1; // 実績の時はデフォルト広告
       addMessage('bot', '制作実績ですね。アプリ開発とグラフィックデザイン、どちらをご覧になりますか？', [
         { name: 'Apps (アプリ開発)', path: '/Apps' },
         { name: 'Art Projects (デザイン)', path: '/' }
       ]);
     } else if (option.value === 'cats') {
+      // ここで猫の広告(ID: 2)に切り替え！
+      currentAdId.value = 2;
       addMessage('bot', 'わが家には5匹の猫がいます。彼らとの日常がデザインのインスピレーションの源なんです（笑）');
     } else if (option.value === 'contact') {
+      currentAdId.value = 1;
       addMessage('bot', 'ご相談ありがとうございます！Contactページからメッセージをいただければ、すぐにお返事いたします。', [
         { name: 'Contact ➔', path: '/Contact' }
       ]);
@@ -63,29 +70,39 @@ const toggleChat = () => {
         <span class="bot-name">RutenVeil Assistant</span>
         <button @click="toggleChat" class="close-btn">✕</button>
       </div>
-      <!-- リンクを v-for で回す -->
+
       <div class="chat-body" ref="chatBody">
         <div v-for="(msg, idx) in messages" :key="idx" :class="['msg-bubble', msg.sender]">
-  {{ msg.text }}
-
-  <div v-if="msg.links && msg.links.length > 0" class="msg-link-wrapper">
-    <router-link 
-      v-for="link in msg.links" 
-      :key="link.path"
-      :to="link.path" 
-      class="chat-inline-link" 
-      @click="toggleChat"
-    >
-      {{ link.name }}
-    </router-link>
-  </div>
-</div>
+          {{ msg.text }}
+          <div v-if="msg.links && msg.links.length > 0" class="msg-link-wrapper">
+            <router-link 
+              v-for="link in msg.links" 
+              :key="link.path"
+              :to="link.path" 
+              class="chat-inline-link" 
+              @click="toggleChat"
+            >
+              {{ link.name }}
+            </router-link>
+          </div>
+        </div>
         
         <div v-if="showOptions" class="options-container">
           <button @click="handleOption({label: '実績を見たい', value: 'works'})">実績を見たい</button>
           <button @click="handleOption({label: '猫について', value: 'cats'})">猫について</button>
           <button @click="handleOption({label: '仕事の相談', value: 'contact'})">仕事の相談</button>
         </div>
+      </div>
+
+      <div class="chat-ad-footer">
+        <transition name="fade-ad" mode="out-in">
+          <img 
+            :key="currentAd.id" 
+            :src="currentAd.image" 
+            :alt="currentAd.name" 
+            class="ad-banner"
+          />
+        </transition>
       </div>
     </div>
 
@@ -227,6 +244,39 @@ const toggleChat = () => {
 .msg-bubble.bot .chat-inline-link {
   background: #1a1a1a;
   color: #fff;
+}
+
+/* 広告 */
+/* 広告エリアのコンテナ：高さを固定して、はみ出さないように制御 */
+.chat-ad-footer {
+  width: 100%;
+  /* 高さは今のままでOK（120pxくらいかな？） */
+  height: 120px; 
+  padding: 10px 15px;
+  background: white;
+  border-top: 1px solid #f0f0f0;
+  box-sizing: border-box;
+}
+
+/* 広告画像自体の制御 */
+.ad-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* アスペクト比を維持して枠内に収める */
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+}
+
+/* フェードアニメーションをスムーズに */
+.fade-ad-enter-active,
+.fade-ad-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-ad-enter-from,
+.fade-ad-leave-to {
+  opacity: 0;
 }
 
 @keyframes slideIn {

@@ -62,6 +62,17 @@ export const shopItems = [
     description: "全フレーバーをコンプリートしたチョコレートセット。"
   },
   {
+    id: 'app-ad-timewheel',
+    name: 'TimeWheel (PWA)',
+    category: 'App',
+    price: 0,
+    isApp: true,
+    image: '/src/assets/shopItem/app-ad-1.png',
+    description: '一日のスケジュールを自動最適化するPWA時間管理ツール。タスクを数珠つなぎに配置し、効率的な時間設計を支援します。',
+    link: 'https://timewheel.vercel.app/', // アプリへのリンク
+    isApp: true // アプリかどうかを判別するフラグを持たせると便利です
+  },
+  {
     id: 7,
     name: "Vinyl Collection: Spring",
     category: "Vinyl",

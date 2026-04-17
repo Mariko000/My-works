@@ -184,27 +184,41 @@ const closeDemoModal = () => {
     </nav>
 
     <section class="items-grid">
-      <div 
-        v-for="item in filteredItems()" 
-        :key="item.id" 
-        class="item-card"
-      >
-        <div class="item-image-wrapper">
-          <img :src="item.image" :alt="item.name" class="item-image" />
-          <div class="item-overlay">
-            <!-- v-for で回している商品データ item を引数として渡す -->
-            <button class="btn-add-cart" @click="addToCart(item)">Add to Cart</button>
-          </div>
-        </div>
+  <div 
+    v-for="item in filteredItems()" 
+    :key="item.id" 
+    class="item-card"
+  >
+    <div class="item-image-wrapper">
+      <img :src="item.image" :alt="item.name" class="item-image" />
+      
+      <div class="item-overlay">
+        <template v-if="item.isApp">
+          <a :href="item.link" target="_blank" class="btn-add-cart" style="text-decoration: none;">
+            Open App
+          </a>
+        </template>
         
-        <div class="item-info">
-          <span class="item-category">{{ item.category }}</span>
-          <h3 class="item-name">{{ item.name }}</h3>
-          <p class="item-price">¥{{ item.price.toLocaleString() }}</p>
-          <p class="item-desc">{{ item.description }}</p>
-        </div>
+        <template v-else>
+          <button class="btn-add-cart" @click="addToCart(item)">
+            Add to Cart
+          </button>
+        </template>
       </div>
-    </section>
+    </div>
+    
+    <div class="item-info">
+      <span class="item-category">{{ item.category }}</span>
+      <h3 class="item-name">{{ item.name }}</h3>
+      
+      <p v-if="!item.isApp" class="item-price">
+        ¥{{ item.price.toLocaleString() }}
+      </p>
+      
+      <p class="item-desc">{{ item.description }}</p>
+    </div>
+  </div>
+</section>
   </main>
 </template>
 
