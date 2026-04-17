@@ -55,7 +55,7 @@ export const shopItems = [
   },
   {
     id: 6,
-    name: "Complete Sound Archive Set",
+    name: "Complete Set",
     category: "Set Item",
     price: 2400,
     image: vinylAllImg,
