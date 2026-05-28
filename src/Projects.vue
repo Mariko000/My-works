@@ -81,6 +81,7 @@ const scrollNext = () => {
       </div>
     </div>
 
+            <!-- 
     <section class="ad-grid-section">
   <h2 class="section-title">Latest Updates</h2>
   <div class="ad-grid">
@@ -92,16 +93,19 @@ const scrollNext = () => {
       <a :href="ad.link" class="ad-link">
         <img :src="ad.src" :alt="ad.title" />
         
+
         <div class="ad-overlay">
           <span v-if="ad.size === 'square'">Instagram Feed Size</span>
           <span v-if="ad.size === 'vertical'">Stories / TikTok Size</span>
           <span v-if="ad.size === 'horizontal'">Google Display Size</span>
         </div>
+        
       </a>
     </div>
   </div>
 </section>
 
+ -->
   </main>
 </div>
 </template>
