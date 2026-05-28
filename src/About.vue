@@ -9,40 +9,41 @@
 <template>
   <main class="about-container">
     <div class="content-layout">
-      <!-- Left: Concept Section -->
       <section class="concept-section">
         <h2 class="section-title">Concept</h2>
         
         <div class="lang-jp">
-          <p>生命を図形へと変換し、その境界に宿る感情を写し出す。</p>
+          <p class="catch-copy">
+           洗練されたシンプルなデザインに、<span class="highlight">ストリートポップな遊び心</span>をプラス
+           </p>
           <p>
-            ビジュアルアーティスト RutenVeilは、生き物を無機質な図形へと再構築し、その物質が内包する熱量を「有機的な温度」として表現することを探求しています。
+            RutenVeil（ルーテンヴェイル）は、ロゴ・パッケージ・UIパーツなどのグラフィック制作から、アプリケーションのシステム開発までをすべて一人で手がけるフルスタックなクリエイターです。
           </p>
+           <p>
+            すっきりと見やすい画面設計をベースに、鮮やかな色彩の緩急や、触っていてワクワクするような「飽きさせない仕掛け」を組み込んだUI/UXデザインを得意としています。
+           </p>
           <p>
-            線と色が重なり合うことで生まれる「心地よい緊張感」。それは冷たいデジタルの中にある、生々しい鼓動の視覚化でもあります。
+            単に見栄えが良いだけではなく、Vue.jsやPythonを用いた実用的なシステム実装までを一気通貫で担当。グラフィック制作のノウハウと確かなエンジニアリングを組み合わせることで、使う人が楽しく、直感的に迷わず操作できるアプリケーションを提供します。
           </p>
-          <p>
-            また、この視覚的探求はグラフィックに留まらず、コードを用いたアプリケーション開発においても、機能と感性が共鳴するインターフェースの構築へと繋がっています。
-緻密なビジュアル設計とモダンな実装技術。その両面から、新たなデジタル体験の輪郭を描き出します。
-            </p>
         </div>
 
         <div class="lang-en">
-          <p>Converting life into geometry, capturing the emotions that reside within their boundaries.</p>
+          <p>Infusing refined, minimalist design with a street-pop playful edge.</p>
           <p>
-            Visual artist RutenVeil explores the deconstruction of living beings into inorganic forms, 
-            seeking to express the latent thermal energy of matter as "organic warmth."
+            RutenVeil is a full-stack creator independently handling everything from graphic production—including logos, packaging, and UI components—to core application development.
           </p>
           <p>
-            The "calm tension" born from the layering of lines and colors is a visualization 
-            of a raw, vivid pulse hidden within the cold digital realm.
+            Building upon clean, highly readable layouts, I specialize in UI/UX design that utilizes dynamic color contrasts and engaging features to keep users hooked and entertained.
+          </p>
+          <p>
+            My work goes beyond appearance—I deliver complete, robust implementations using modern technologies like Vue.js and Python. By combining graphic expertise with solid engineering, I create applications that are both highly functional and fun to navigate.
           </p>
         </div>
+
       </section>
 
-      <!-- Right: Contact Section -->
       <aside class="contact-section">
-        <h2 class="section-title">Portfolio</h2>
+        <h2 class="section-title">Link</h2>
         <ul class="contact-list">
           <li><a href="https://www.instagram.com/rutenveil/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
           <li><a href="https://www.behance.net/rutenveil" target="_blank" rel="noopener noreferrer">Behance</a></li>
@@ -56,60 +57,98 @@
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 40px 100px; /* 上の余白(120px)を40pxに縮小して位置を上げました */
+  padding: 40px 40px 100px;
 }
 
 .content-layout {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* これで左右のタイトルの高さをピタリと合わせます */
+  align-items: flex-start;
   gap: 80px;
 }
 
 .concept-section {
   flex: 1;
   max-width: 750px;
-}
-
-.contact-section {
-  width: 250px;
-  border-left: 1px solid #eee;
-  padding-left: 30px;
+  
+  /* 💡 日本語と英語を1つのグリッドセルに重ね合わせる魔法の設定 */
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .section-title {
   font-size: 0.85rem;
-  font-weight: 400; /* 少しだけ太くして視認性を回復 */
+  font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #888;
-  margin-bottom: 30px; /* 見出し下の余白を微調整 */
+  margin-bottom: 30px;
   line-height: 1;
+  grid-column: 1; /* タイトルも同じグリッドに所属させる */
 }
 
+/* ==========================================================================
+   💡 日本語と英語をブロックごと完全に同一座標に重ねるCSS
+   ========================================================================== */
 .lang-jp, .lang-en {
+  grid-column: 1;     /* 完全に同じカラムに重ねる */
+  grid-row: 2;        /* section-title（row:1）のすぐ下に重ねて配置 */
   margin-bottom: 50px;
 }
 
+/* 前面：日本語の設定 */
+.lang-jp {
+  position: relative;
+  z-index: 2;         /* 英語より手前に出す */
+  mix-blend-mode: multiply; /* 💡 文字が重なった部分にグラフィック的な深みを出す（お好みで） */
+}
+
 .lang-jp p {
-  font-size: 1.05rem; /* 文字サイズを元（1rem以上）に戻しました */
-  line-height: 2; /* 読みやすさを確保 */
-  margin-bottom: 1.8rem;
+  font-size: 1.05rem;
+  line-height: 2.2;   /* 💡 英語が下にずれて重なるため、行間を少しだけ広げて可読性を確保 */
+  margin-bottom: 2.5rem;
   font-weight: 400;
   color: #111;
 }
 
-.lang-en p {
-  font-size: 0.95rem; /* 英語はバランスを見て調整 */
-  line-height: 1.8;
-  margin-bottom: 1.2rem;
-  font-weight: 300;
-  color: #444;
+/* 日本語キャッチコピー単体のサイズ */
+.lang-jp p.catch-copy {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.6;
 }
 
+/* 背面：英語の設定（日本語と同じサイズ感で大胆に大きく、半分下にずらす） */
 .lang-en {
-  opacity: 0.6;
+  position: relative;
+  z-index: 1;         /* 日本語の後ろに回す */
+  pointer-events: none; /* テキスト選択の邪魔をしない */
+  
+  /* （下へ0.6rem、右へ3px） */
+  transform: translate(7px, 0.6rem);
 }
+
+.lang-en p {
+  /* 💡 日本語の文字の大きさに合わせて大胆に大きく */
+  font-size: 1.05rem; 
+  line-height: 2.2;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  font-style: italic; /* 斜体 */
+  letter-spacing: 0.05em; /* 英字の詰まり具合を調整 */
+  
+  /* 💡 薄めの蛍光マゼンタ指定 */
+  color: #ff007f;
+  opacity: 0.25;      /* 若干うすめに */
+}
+
+/* 英語キャッチコピー（日本語のサイズに連動して大きく） */
+.lang-en p:first-child {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+/* ========================================================================== */
 
 .contact-list {
   list-style: none;
@@ -121,7 +160,7 @@
 }
 
 .contact-list a {
-  font-size: 1rem; /* コンタクトの文字サイズも戻しました */
+  font-size: 1rem;
   color: #111;
   text-decoration: none;
   transition: opacity 0.3s;
@@ -142,6 +181,10 @@
     border-top: 1px solid #eee;
     padding-left: 0;
     padding-top: 30px;
+  }
+  /* スマホ版でもグリッドの重なりを維持しつつ調整 */
+  .lang-en {
+    transform: translateY(0.4rem);
   }
 }
 </style>
