@@ -11,8 +11,9 @@ const cmsItems = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await fetch('https://rutenveil.microcms.io/api/v1/shopping', {
-      headers: { 'X-MICROCMS-API-KEY': 'A0rTaioKglcH7q12k2OHke0lyHdAsdnJQQzm' }
+    // 💡 URLとAPIキーを、環境変数（伏せ字）に変更
+    const response = await fetch(import.meta.env.VITE_MICROCMS_URL, {
+      headers: { 'X-MICROCMS-API-KEY': import.meta.env.VITE_MICROCMS_API_KEY }
     });
 
     console.log('--- 【検証1】通信ステータス ---');
