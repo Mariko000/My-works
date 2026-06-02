@@ -8,9 +8,10 @@ import imgTop from '@/assets/App_portfolio_top (1).png';
 import { createClient } from 'microcms-js-sdk';
 
 // microCMSの通信設定
+// microCMSの通信設定（環境変数から安全に読み込む形に変更）
 const client = createClient({
-  serviceDomain: 'rutenveil', // サービスID
-  apiKey: 'A0rTaioKglcH7q12k2OHke0lyHdAsdnJQQzm'      //
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.VITE_MICROCMS_API_KEY
 });
 
 // 最新ニュースのデータを格納する変数（最初は空っぽ）
@@ -23,13 +24,13 @@ onMounted(async () => {
   try {
     // ニュースの取得（そのまま）
     const response = await client.get({
-      endpoint: 'news',
+      endpoint: 'news',// ここで「news」を指定
       queries: { limit: 5 }
     });
     newsItems.value = response.contents;
 
     // 🛠️ コンソールに出すだけでなく、contentsItems.value に代入する形に修正
-    const contentsResponse = await client.get({ endpoint: 'contents' });
+    const contentsResponse = await client.get({ endpoint: 'contents' });// ここで「contents」を指定
     contentsItems.value = contentsResponse.contents;
     console.log("アプリデータの配列:", contentsResponse.contents);
 
