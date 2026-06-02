@@ -11,6 +11,18 @@ import vinylSpringImg from '@/assets/shopItem/Vinyl Record PSD MockUp_spring.png
 import vinylAutumnImg from '@/assets/shopItem/Vinyl Record _Autumn.png';
 import vinylWinterImg from '@/assets/shopItem/Vinyl Record_winter.png';
 
+//オリジナル画像（ダウンロードできる用）
+import springGfx from '@/assets/Spring.png';
+import lifeSummerGfx from '@/assets/life_Summer.png';
+import autumnGfx from '@/assets/Autumn.png';
+import winterGfx from '@/assets/Winter.png';
+
+import lifeAppleGfx from '@/assets/life_apple.png';
+import gfxTheInvisibleLake from '@/assets/gfx_The_Invisible_Lake.png';
+import originalDarkGfx from '@/assets/Original_Dark.png';
+import berryPsychedelicGfx from '@/assets/Berry Psychedelic.png';
+import mintFreshGfx from '@/assets/Mint_Fresh.png';
+
 
 export const shopItems = [
   {
@@ -19,7 +31,10 @@ export const shopItems = [
     category: "LifeStyle",
     price: 240,
     image: bottleImg,
-    description: "日常に彩りを添えるジュース"
+    description: "日常に彩りを添えるジュース",
+    originalImage: lifeAppleGfx,
+    size: "350ml",
+    url: "https://www.vivivit.com/works/1052825"
   },
   {
     id: 2,
@@ -27,7 +42,10 @@ export const shopItems = [
     category: "Apparel",
     price: 4800,
     image: tshirtImg,
-    description: "和テイストの、高品質なコットンTシャツ。"
+    size: "Free",
+    description: "和テイストの、高品質なコットンTシャツ。",
+    originalImage: gfxTheInvisibleLake,
+    url: "https://www.behance.net/" // Tシャツ用のBehance等があればここにURLを入れてください
   },
   {
     id: 4,
@@ -35,7 +53,10 @@ export const shopItems = [
     category: "LifeStyle",
     price: 800,
     image: vinylBerryImg,
-    description: "ベリーフレーバーのチョコレート"
+    description: "ベリーフレーバーのチョコレート",
+    originalImage: berryPsychedelicGfx,
+    size: "100g",
+    url: "https://www.behance.net/gallery/246407685/Package-design-Chocolate"
   },
   {
     id: 3,
@@ -43,7 +64,10 @@ export const shopItems = [
     category: "LifeStyle",
     price: 800,
     image: vinylDarkImg,
-    description: "カカオ70%のダークチョコレート"
+    description: "カカオ70%のダークチョコレート",
+    originalImage: originalDarkGfx,
+    size: "100g",
+    url: "https://www.behance.net/gallery/246407685/Package-design-Chocolate"
   },
   {
     id: 5,
@@ -51,7 +75,10 @@ export const shopItems = [
     category: "LifeStyle",
     price: 800,
     image: vinylMintImg,
-    description: "爽やかなミント・チョコレート"
+    description: "爽やかなミント・チョコレート",
+    originalImage: mintFreshGfx,
+    size: "100g",
+    url: "https://www.behance.net/gallery/246407685/Package-design-Chocolate"
   },
   {
     id: 6,
@@ -59,7 +86,10 @@ export const shopItems = [
     category: "Set Item",
     price: 2400,
     image: vinylAllImg,
-    description: "全フレーバーをコンプリートしたチョコレートセット。"
+    description: "全フレーバーをコンプリートしたチョコレートセット。",
+    originalImage: originalDarkGfx,
+    size: "300g (100g × 3)",
+    url: "https://www.behance.net/gallery/246407685/Package-design-Chocolate"
   },
   {
     id: 'app-ad-timewheel',
@@ -69,8 +99,8 @@ export const shopItems = [
     isApp: true,
     image: '/src/assets/shopItem/app-ad-1.png',
     description: '一日のスケジュールを自動最適化するPWA時間管理ツール。タスクを数珠つなぎに配置し、効率的な時間設計を支援します。',
-    link: 'https://timewheel.vercel.app/', // アプリへのリンク
-    isApp: true // アプリかどうかを判別するフラグを持たせると便利です
+    link: 'https://timewheel.vercel.app/',
+    size: "N/A"
   },
   {
     id: 7,
@@ -78,16 +108,21 @@ export const shopItems = [
     category: "Vinyl",
     price: 3500,
     image: vinylSpringImg,
-    description: "春の息吹を抽象化したグラフィックジャケット"
+    description: "春の息吹を抽象化したグラフィックジャケット",
+    originalImage: springGfx,
+    size: "12 inch Record",
+    url: "https://www.behance.net/gallery/247233997/Spring-Vibe-Music-cover-Art"
   },
-  
   {
     id: 9,
     name: "Vinyl Collection: Summer",
     category: "Vinyl",
     price: 3500,
     image: vinylStandardImg,
-    description: "都会の夏を表現したグラフィックジャケット"
+    description: "都会の夏を表現したグラフィックジャケット",
+    originalImage: lifeSummerGfx,
+    size: "12 inch Record",
+    url: "https://www.behance.net/gallery/246212729/Summer-Vibe-Music-cover-Art"
   },
   {
     id: 8,
@@ -95,15 +130,20 @@ export const shopItems = [
     category: "Vinyl",
     price: 3500,
     image: vinylAutumnImg,
-    description: "秋の静寂と色彩を閉じ込めた、グラフィックジャケット"
+    description: "秋の静寂と色彩を閉じ込めた、グラフィックジャケット",
+    originalImage: autumnGfx,
+    size: "12 inch Record",
+    url: "https://www.behance.net/gallery/247458655/Autumn-Vibe-Music-cover-Art"
   },
-
   {
     id: 10,
     name: "Vinyl Collection: Winter",
     category: "Vinyl",
     price: 3500,
     image: vinylWinterImg,
-    description: "冬を表現したグラフィックジャケット"
+    description: "冬を表現したグラフィックジャケット",
+    originalImage: winterGfx,
+    size: "12 inch Record",
+    url: "https://www.behance.net/gallery/247477111/Winter-Vibe-Music-cover-Art"
   }
 ];

@@ -1,9 +1,42 @@
 <script setup>
 import appBack from '@/assets/app-back.png';
-import { ref } from 'vue';
+import { onMounted,ref } from 'vue';
 import imgRecipe from '@/assets/smartphone_recipe .png';
 import imgSchedule from '@/assets/smartphone_schedule.png';
 import imgTop from '@/assets/App_portfolio_top (1).png';
+
+import { createClient } from 'microcms-js-sdk';
+
+// microCMSの通信設定
+const client = createClient({
+  serviceDomain: 'rutenveil', // サービスID
+  apiKey: 'A0rTaioKglcH7q12k2OHke0lyHdAsdnJQQzm'      //
+});
+
+// 最新ニュースのデータを格納する変数（最初は空っぽ）
+const newsItems = ref([]);
+
+const contentsItems = ref([]);
+
+// 3. 画面が開いた瞬間にデータを読み込む処理
+onMounted(async () => {
+  try {
+    // ニュースの取得（そのまま）
+    const response = await client.get({
+      endpoint: 'news',
+      queries: { limit: 5 }
+    });
+    newsItems.value = response.contents;
+
+    // 🛠️ コンソールに出すだけでなく、contentsItems.value に代入する形に修正
+    const contentsResponse = await client.get({ endpoint: 'contents' });
+    contentsItems.value = contentsResponse.contents;
+    console.log("アプリデータの配列:", contentsResponse.contents);
+
+  } catch (error) {
+    console.error('データ取得失敗:', error);
+  }
+});
 
 // スライド用データの拡張
 const devices = ref([
@@ -22,13 +55,15 @@ const devices = ref([
     tag: 'Popular'
   },
   { 
-    name: 'Product Suite', 
+    name: 'About Me', 
     src: imgTop,
-    tagline: 'Art and Logic Solution',
-    desc: '開発補助からライフスタイルまで、多角的なアプローチで日常をサポート。',
+    tagline: 'Your Developer friend',
+    desc: 'あなたの日常をサポートするアプリを制作します',
     tag: '' 
   }
 ]);
+
+
 
 const activeIndex = ref(0);
 
@@ -80,18 +115,16 @@ const getPositionClass = (index) => {
   </div>
 
   <section class="studio-news">
-    <h2 class="section-tag">Latest News</h2>
-    <ul class="news-list">
-      <li>
-        <span class="date">2026.04.16</span>
-        <span class="content">New App "FitSpin" UI development in progress.</span>
-      </li>
-      <li>
-        <span class="date">2026.04.01</span>
-        <span class="content">Portfolio redesigned with new Hero visual.</span>
-      </li>
-    </ul>
-  </section>
+  <h2 class="section-tag">Latest News</h2>
+  <ul class="news-list">
+    <li v-if="newsItems.length === 0">Loading news...</li>
+    
+    <li v-for="item in newsItems" :key="item.id">
+      <span class="date">{{ new Date(item.date).toLocaleDateString('ja-JP').replace(/\//g, '.') }}</span>
+      <span class="news-text" v-html="item.content"></span>
+    </li>
+  </ul>
+</section>
 </div>
 
 <section class="studio-about">
@@ -103,7 +136,7 @@ const getPositionClass = (index) => {
         <h3 class="vision-title">{{ devices[activeIndex].name }}</h3>
         <p class="tagline">{{ devices[activeIndex].tagline }}</p>
         <p class="description">{{ devices[activeIndex].desc }}</p>
-        <p class="highlight-text">Exploring Art and Logic through products.</p>
+        <p class="highlight-text">Exploring more ↓</p>
       </div>
 
       <div class="device-selector-container">
@@ -190,10 +223,7 @@ const getPositionClass = (index) => {
           TimeWheel
           <span class="app-tag">Popular</span>
         </p>
-       
-       
-
-
+      
         <p class="meta">
           Status: 公開中<br>
           Stack: Vue.js<br>
@@ -207,33 +237,32 @@ const getPositionClass = (index) => {
   </div>
       </div>
 
-
-      <!-- Row 2 : Behance -->
       <div class="left">
-        <div class="app-card">
-          <a 
-            href="https://www.behance.net/gallery/246820869/ClipCook-Full-Stack-Cooking-App" 
-            target="_blank" 
-            rel="noopener"
-            class="card-link"
-          >
-            <img src="@/assets/App_portfolio_top.png" alt="app thumbnail" />
-            <div class="overlay">
-              <span>View on Behance ↗</span>
-            </div>
-          </a>
-        </div>
+        <a href="https://fit-spin.vercel.app/" target="_blank" rel="noopener" class="app-icon-link">
+          <div class="app-icon-wrapper">
+            <img src="@/assets/logo/icon-fitspin.png" alt="FitSpin Icon" class="app-icon" />
+          </div>
+        </a>
       </div>
 
       <div class="right">
-        <p>「計量の壁」を解決する 日・英・米対応レシピSNS</p>
-        <p class="app-name">ClipCook</p>
-        <p class="meta">
-          Status: Prototype<br>
-          Stack: Python / Vue<br>
-          ClipCookは、海外レシピ特有の単位（cup, oz, lb等）や、地域による容量差（US/UK/JP）を誰でも正確に調理できるようにサポートするレシピ管理・SNSプラットフォームです。<br>
-          Note: サーバーコストの都合により未公開
+        <p>日常に溶け込むフィットネスアプリケーション</p>
+        <p class="app-name">
+          FitSpin
+          <span class="app-tag">New</span>
         </p>
+
+        <p class="meta">
+          Status: 公開中<br>
+          Stack: Vue.js<br>
+          Note: none
+        </p>
+
+        <div class="action-area">
+          <a href="https://fit-spin.vercel.app/" target="_blank" rel="noopener" class="btn-download">
+            Download App <span>→</span>
+          </a>
+        </div>
       </div>
 
       <div class="left">
@@ -259,9 +288,84 @@ const getPositionClass = (index) => {
       Download App <span>→</span>
     </a>
   </div>
+</div>
+
+
+
+
+      <!-- Row 2 : Behance -->
+      <div class="left">
+        <div class="app-card">
+          <a 
+            href="https://www.behance.net/gallery/246820869/ClipCook-Full-Stack-Cooking-App" 
+            target="_blank" 
+            rel="noopener"
+            class="card-link"
+          >
+            <img src="@/assets/App_portfolio_top.png" alt="app thumbnail" />
+            <div class="overlay">
+              <span>View on Behance ↗</span>
+            </div>
+          </a>
+        </div>
       </div>
 
-    </section>
+      
+
+      <div class="right">
+        <p>「計量の壁」を解決する 日・英・米対応レシピSNS</p>
+        <p class="app-name">ClipCook</p>
+        <p class="meta">
+          Status: Prototype<br>
+          Stack: Python / Vue<br>
+          ClipCookは、海外レシピ特有の単位（cup, oz, lb等）や、地域による容量差（US/UK/JP）を誰でも正確に調理できるようにサポートするレシピ管理・SNSプラットフォームです。<br>
+          Note: サーバーコストの都合により未公開
+        </p>
+      </div>
+
+
+
+  <template v-for="item in contentsItems" :key="item.id">
+
+<div class="left">
+  <a :href="item.link_url.startsWith('http') ? item.link_url : 'https://' + item.link_url" target="_blank" rel="noopener" class="app-icon-link">
+    
+    <div v-if="item.image_type && item.image_type[0] === 'icon'" class="app-icon-wrapper">
+      <img :src="item.image.url" :alt="item.App_name" class="app-icon" />
+    </div>
+
+    <div v-else-if="item.image_type && item.image_type[0] === 'card'" class="app-card">
+      <div class="card-link">
+        <img :src="item.image.url" :alt="item.App_name" />
+        <div class="overlay">
+          <span>View on Behance ↗</span>
+        </div>
+      </div>
+    </div>
+
+  </a>
+</div>
+
+<div class="right">
+  <p>{{ item.description }}</p>
+  
+  <p class="app-name">
+    {{ item.App_name }}
+    <span v-if="item.tag" class="app-tag">{{ item.tag }}</span>
+  </p>
+
+  <p class="meta" style="white-space: pre-wrap;">{{ item.Meta }}</p>
+
+  <div class="action-area">
+    <a :href="item.link_url.startsWith('http') ? item.link_url : 'https://' + item.link_url" target="_blank" rel="noopener" class="btn-download">
+      Download App <span>→</span>
+    </a>
+  </div>
+</div>
+
+</template>
+  </section>
+
 
     <section class="studio-contact-lead">
   <div class="contact-inner">

@@ -15,7 +15,7 @@ import abstBlue from '@/assets/abst_blue.png'
 import abstOverhead from '@/assets/abst_Overhead.jpg'
 // import abstSilentBlade from '@/assets/abst_SILENT_BLADE.png'
 import abstSun from '@/assets/abst_Sun.PNG'
-import Spring from '@/assets/Spring.PNG'
+import Spring from '@/assets/Spring.png'
 
 // --- Graphic カテゴリ ---
 import gfxBirds from '@/assets/gfx_birds.png'
@@ -25,9 +25,9 @@ import gfxFlowers from '@/assets/gfx_Flowers.png'
 import gfxMandara from '@/assets/gfx_mandara.png'
 import gfxTypo1 from '@/assets/gfx_typo_1.png'
 import gfxlabyrinth from '@/assets/gfx_labyrinth.png'
-import gfxThe_Invisible_Lake from '@/assets/gfx_The_Invisible_Lake.PNG'
+import gfxThe_Invisible_Lake from '@/assets/gfx_The_Invisible_Lake.png'
 import lifeSummer from '@/assets/life_Summer.png'
-import Dark from '@/assets/Original_Dark.PNG'
+import Dark from '@/assets/Original_Dark.png'
 
 export const works = [
   // Life & Energy
