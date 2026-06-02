@@ -20,6 +20,7 @@ const newsItems = ref([]);
 const contentsItems = ref([]);
 
 // 3. 画面が開いた瞬間にデータを読み込む処理
+// client.get({ endpoint: '◯◯' }) が実行された瞬間、自動でURLを組み立てて fetch（通信）を行う
 onMounted(async () => {
   try {
     // ニュースの取得（そのまま）

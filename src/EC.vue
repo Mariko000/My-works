@@ -11,6 +11,7 @@ const cmsItems = ref([]);
 
 onMounted(async () => {
   try {
+    // fetch()を使って直接URLを叩いて通信している場合は、ライブラリがURLを組み立ててくれません。
     // URLとAPIキーを、環境変数（伏せ字）に変更
     const response = await fetch(import.meta.env.VITE_MICROCMS_URL, {
       headers: { 'X-MICROCMS-API-KEY': import.meta.env.VITE_MICROCMS_API_KEY }
