@@ -946,23 +946,27 @@ const closeDetailModal = () => {
   background: rgba(255, 255, 255, 0.4); /* 背景をほんのり白くボカす */
   backdrop-filter: blur(6px);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;    /* 中身を縦並びに */
+  align-items: center;       /* 縦並びにした中身を「横方向の中央」に揃える */
+  justify-content: center;    /* 縦並びにした中身を「縦方向の中央」に揃える */
+  
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   padding: 20px;
+  box-sizing: border-box;    /* パディングが外にはみ出してズレるのを防ぐ */
 }
 
 .item-card:hover .item-overlay {
   opacity: 1;
 }
 
-/* ボタンを中央に綺麗に並べるコンテナ */
+/* ボタンを中央に綺麗に並べるコンテナも中央寄せを保証 */
 .overlay-button-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 85%;
+  margin: 0 auto;            /* 💡 念のため外側のマージンでも中央寄せを担保 */
 }
 
 /* 共通のボタンベース */
