@@ -12,7 +12,7 @@ import vinylAutumnImg from '@/assets/shopItem/Vinyl Record _Autumn.png';
 import vinylWinterImg from '@/assets/shopItem/Vinyl Record_winter.png';
 
 //オリジナル画像（ダウンロードできる用）
-import springGfx from '@/assets/Spring.png';
+import springGfx from '@/assets/gfx_The_Invisible_Lake.png';
 import lifeSummerGfx from '@/assets/life_Summer.png';
 import autumnGfx from '@/assets/Autumn.png';
 import winterGfx from '@/assets/Winter.png';
