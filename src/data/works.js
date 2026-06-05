@@ -15,7 +15,7 @@ import abstBlue from '@/assets/abst_blue.png'
 import abstOverhead from '@/assets/abst_Overhead.jpg'
 // import abstSilentBlade from '@/assets/abst_SILENT_BLADE.png'
 import abstSun from '@/assets/abst_Sun.PNG'
-// import Spring from '@/assets/Spring.png'
+import Spring from '@/assets/Spring.png'
 
 // --- Graphic カテゴリ ---
 import gfxBirds from '@/assets/gfx_birds.png'
@@ -59,9 +59,9 @@ date: '2026.Mar'
   { id: 5, title: 'Dark', category: 'Graphic', image: Dark,
   description: 'チョコレートパッケージのプロジェクトのグラフィック、周りを弾けるフレーバーを表しています。',
   date: '2026.Jan' },
-  // { id: 6, title: 'Spring', category: 'Abstract', image: Spring,
-  // description: '春はお花と日差しと生命の活動の始まりの季節',
-  // date: '2026.Apr' },
+  { id: 6, title: 'Spring', category: 'Abstract', image: Spring,
+   description: '春はお花と日差しと生命の活動の始まりの季節',
+   date: '2026.Apr' },
   // { id: 7, title: 'Cell', category: 'Life & Energy', image: lifeCell },
   { id: 8, title: 'Energy', category: 'Life & Energy', image: lifeEnergy },
   // { id: 9, title: 'Fish Voyage', category: 'Life & Energy', image: lifeFish },
