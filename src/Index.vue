@@ -1,40 +1,160 @@
 <script setup>
 import appBack from '@/assets/app-back.png';
-import { onMounted,ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import imgRecipe from '@/assets/smartphone_recipe .png';
 import imgSchedule from '@/assets/smartphone_schedule.png';
 import imgTop from '@/assets/App_portfolio_top (1).png';
 
 import { createClient } from 'microcms-js-sdk';
 
+// ==========================================
+// 🛠️ 設計図書（資料画像）のインポート定義
+// ==========================================
+import clipCook0 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-1P 概要図.drawio.png';
+import clipCook1 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-4P Django バックエンド構成.drawio.png';
+import clipCook2 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-P2-材料連動型・自動倍率計算機能.drawio.png';
+import clipCook3 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-P3- フロント ↔︎ バック通信設計図.drawio.png';
+import clipCook4 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-P4-単位・食材換算ロジック.drawio.png';
+
+import timeWheel0 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P1-全体構成図.drawio.png';
+import timeWheel1 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P10-計算方法.drawio.png';
+import timeWheel2 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P2-技術ポイント.drawio.png';
+import timeWheel3 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P3-チュートリアル・アーキテクチャ.drawio.png';
+import timeWheel4 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P4-全体フロー.drawio.png';
+import timeWheel5 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P5-時間の正規化.drawio.png';
+import timeWheel6 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P6-スケジュール自動作成プロセス①.drawio.png';
+import timeWheel7 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P7表示方法.drawio.png';
+import timeWheel8 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P8-連鎖同期.drawio.png';
+import timeWheel9 from '@/assets/Project_Overview/Time Wheel_paper/TimeWheel-P9-アバター演出定義書.drawio.png';
+
+const projectPapers = {
+  ClipCook: [clipCook0, clipCook1, clipCook2, clipCook3, clipCook4],
+  TimeWheel: [timeWheel0, timeWheel1, timeWheel2, timeWheel3, timeWheel4, timeWheel5, timeWheel6, timeWheel7, timeWheel8, timeWheel9]
+};
+
+
+// ==========================================
+// 🛠️ ドロップダウン ＆ モーダル制御の状態管理
+// ==========================================
+const openDropdown = ref(null); // 現在開いているドロップダウンのアプリ名 ('TimeWheel' or 'ClipCook')
+const isModalOpen = ref(false); // モーダルの開閉フラグ
+const currentAppPapers = ref([]); // モーダルに表示する現在の画像配列
+const currentPaperIndex = ref(0); // モーダル表示中の画像インデックス
+
+// ドロップダウンの切り替えトグル
+const toggleDropdown = (appName) => {
+  if (openDropdown.value === appName) {
+    openDropdown.value = null;
+  } else {
+    openDropdown.value = appName;
+  }
+};
+
+
+
+// ズーム倍率の状態
+const zoomLevel = ref(1);
+
+// 🌟 ドラッグ移動用の新しい ref
+const isDragging = ref(false);
+const startX = ref(0);
+const startY = ref(0);
+const translateX = ref(0); // 横方向の移動距離
+const translateY = ref(0); // 縦方向の移動距離
+
+// ズーム操作
+const zoomIn = () => { if (zoomLevel.value < 3) zoomLevel.value += 0.2; };
+const zoomOut = () => { if (zoomLevel.value > 0.5) zoomLevel.value -= 0.2; };
+const resetZoom = () => { zoomLevel.value = 1; };
+
+// モーダルを開く（古い重複定義を削除し、ここに集約）
+const openPaperModal = (appName) => {
+  currentAppPapers.value = projectPapers[appName] || [];
+  currentPaperIndex.value = 0;
+  resetZoom(); // 開く時にズームリセット
+  isModalOpen.value = true;
+  openDropdown.value = null; // メニューは閉じる
+};
+
+// モーダルを閉じる
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+// 画像めくりロジック（古い重複定義を削除し、ここに集約）
+const nextPaper = () => {
+  currentPaperIndex.value = (currentPaperIndex.value + 1) % currentAppPapers.value.length;
+  resetZoom(); // ページを変えたらズームリセット
+};
+const prevPaper = () => {
+  currentPaperIndex.value = (currentPaperIndex.value - 1 + currentAppPapers.value.length) % currentAppPapers.value.length;
+  resetZoom(); // ページを変えたらズームリセット
+};
+
+// 一括ダウンロード処理
+const downloadAllPapers = async (appName) => {
+  const urls = projectPapers[appName];
+  if (!urls) return;
+  
+  for (let i = 0; i < urls.length; i++) {
+    try {
+      const response = await fetch(urls[i]);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      const fileName = urls[i].substring(urls[i].lastIndexOf('/') + 1).split('?')[0];
+      a.download = fileName || `${appName}_document_${i + 1}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+      await new Promise(resolve => setTimeout(resolve, 200));
+    } catch (e) {
+      console.error("Download failed:", e);
+    }
+  }
+};
+// 🌟 マウスカーソルで画像を掴んで動かすためのイベント処理
+const startDrag = (event) => {
+  if (zoomLevel.value <= 1) return; // 1倍以下のときはドラッグしない
+  isDragging.value = true;
+  startX.value = event.clientX - translateX.value;
+  startY.value = event.clientY - translateY.value;
+  event.preventDefault();
+};
+
+const onDrag = (event) => {
+  if (!isDragging.value) return;
+  translateX.value = event.clientX - startX.value;
+  translateY.value = event.clientY - startY.value;
+};
+
+const stopDrag = () => {
+  isDragging.value = false;
+};
+
+
 // microCMSの通信設定
-// microCMSの通信設定（環境変数から安全に読み込む形に変更）
 const client = createClient({
   serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.VITE_MICROCMS_API_KEY
 });
 
-// 最新ニュースのデータを格納する変数（最初は空っぽ）
+// 最新ニュース・コンテンツ用
 const newsItems = ref([]);
-
 const contentsItems = ref([]);
 
-// 3. 画面が開いた瞬間にデータを読み込む処理
-// client.get({ endpoint: '◯◯' }) が実行された瞬間、自動でURLを組み立てて fetch（通信）を行う
 onMounted(async () => {
   try {
-    // ニュースの取得（そのまま）
     const response = await client.get({
-      endpoint: 'news',// ここで「news」を指定
+      endpoint: 'news',
       queries: { limit: 5 }
     });
     newsItems.value = response.contents;
 
-    // 🛠️ コンソールに出すだけでなく、contentsItems.value に代入する形に修正
-    const contentsResponse = await client.get({ endpoint: 'contents' });// ここで「contents」を指定
+    const contentsResponse = await client.get({ endpoint: 'contents' });
     contentsItems.value = contentsResponse.contents;
-    console.log("アプリデータの配列:", contentsResponse.contents);
-
   } catch (error) {
     console.error('データ取得失敗:', error);
   }
@@ -65,11 +185,8 @@ const devices = ref([
   }
 ]);
 
-
-
 const activeIndex = ref(0);
 
-// 前へ・次へのロジック
 const nextDevice = () => {
   activeIndex.value = (activeIndex.value + 1) % devices.value.length;
 };
@@ -84,8 +201,6 @@ const getPositionClass = (index) => {
   if (diff === 1) return 'pos-right';
   return 'pos-left';
 };
-
-
 </script>
 
 <template>
@@ -177,17 +292,17 @@ const getPositionClass = (index) => {
 
     <div class="solutions-grid">
       <div class="solution-card">
-        <div class="card-icon">✦</div>
+        <div class="card-icon"></div>
         <h4>UI/UXの刷新</h4>
         <p>複雑化した既存サービスの操作性を、直感的で美しいものに再構築します。</p>
       </div>
       <div class="solution-card">
-        <div class="card-icon">✦</div>
+        <div class="card-icon"></div>
         <h4>プロトタイプの高速開発</h4>
         <p>アイデアを即座に動く形にし、ビジネスの検証を加速させます。</p>
       </div>
       <div class="solution-card">
-        <div class="card-icon">✦</div>
+        <div class="card-icon"></div>
         <h4>「がんばりすぎない」設計</h4>
         <p>ユーザーに負担をかけない、最小限のインターフェースを提供します。</p>
       </div>
@@ -232,11 +347,25 @@ const getPositionClass = (index) => {
           Note: none
         </p>
 
-        <div class="action-area">
-    <a href="https://timewheel.vercel.app/" target="_blank" rel="noopener" class="btn-download">
-      Download App <span>→</span>
-    </a>
-  </div>
+        <div class="action-area dropdown-container">
+          <button @click="toggleDropdown('TimeWheel')" class="btn-download">
+            Menu <span>▼</span>
+          </button>
+          
+          <transition name="dropdown-fade">
+            <div v-if="openDropdown === 'TimeWheel'" class="dropdown-menu">
+              <a href="https://timewheel.vercel.app/" target="_blank" rel="noopener" class="dropdown-item">
+                アプリを起動
+              </a>
+              <button @click="downloadAllPapers('TimeWheel')" class="dropdown-item">
+                設計図書を一括DL
+              </button>
+              <button @click="openPaperModal('TimeWheel')" class="dropdown-item">
+                設計図書を閲覧
+              </button>
+            </div>
+          </transition>
+        </div>
       </div>
 
       <div class="left">
@@ -310,9 +439,7 @@ const getPositionClass = (index) => {
             </div>
           </a>
         </div>
-      </div>
-
-      
+      </div>   
 
       <div class="right">
         <p>「計量の壁」を解決する 日・英・米対応レシピSNS</p>
@@ -323,8 +450,27 @@ const getPositionClass = (index) => {
           ClipCookは、海外レシピ特有の単位（cup, oz, lb等）や、地域による容量差（US/UK/JP）を誰でも正確に調理できるようにサポートするレシピ管理・SNSプラットフォームです。<br>
           Note: サーバーコストの都合により未公開
         </p>
-      </div>
 
+        <div class="action-area dropdown-container">
+          <button @click="toggleDropdown('ClipCook')" class="btn-download">
+            Menu <span>▼</span>
+          </button>
+          
+          <transition name="dropdown-fade">
+            <div v-if="openDropdown === 'ClipCook'" class="dropdown-menu">
+              <a href="https://www.behance.net/gallery/246820869/ClipCook-Full-Stack-Cooking-App" target="_blank" rel="noopener" class="dropdown-item">
+                Behanceへ
+              </a>
+              <button @click="downloadAllPapers('ClipCook')" class="dropdown-item">
+                設計図書を一括DL
+              </button>
+              <button @click="openPaperModal('ClipCook')" class="dropdown-item">
+                設計図書を閲覧
+              </button>
+            </div>
+          </transition>
+        </div>
+      </div>
 
 
   <template v-for="item in contentsItems" :key="item.id">
@@ -391,6 +537,54 @@ const getPositionClass = (index) => {
   <p class="studio-name">RutenVeil</p>
   <p class="copyright">© 2026 RutenVeil. All rights reserved.</p>
 </footer>
+
+<transition name="modal-fade">
+  <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
+    
+    <button class="modal-close-global" @click="closeModal">✕</button>
+
+    <div class="modal-viewer-container">
+      
+      <button class="nav-arrow prev" @click="prevPaper">＜</button>
+
+      <div class="stage">
+        
+        <div class="zoom-controls">
+          <button @click="zoomOut" class="zoom-btn" title="ズームアウト">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <span class="zoom-text">{{ Math.round(zoomLevel * 100) }}%</span>
+          <button @click="zoomIn" class="zoom-btn" title="ズームイン">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <button @click="resetZoom" class="zoom-btn reset">RESET</button>
+        </div>
+
+        <div 
+           class="image-scroller"
+           @mousedown="startDrag"
+           @mousemove="onDrag"
+           @mouseup="stopDrag"
+          @mouseleave="stopDrag"
+          :style="{ cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }"
+           >
+          <img 
+          :src="currentAppPapers[currentPaperIndex]" 
+          :style="{ transform: `scale(${zoomLevel}) translate(${translateX / zoomLevel}px, ${translateY / zoomLevel}px)` }"
+          class="target-image"
+           />
+          </div>
+        
+        <div class="page-counter" v-if="currentAppPapers.length">
+          {{ currentPaperIndex + 1 }} / {{ currentAppPapers.length }}
+        </div>
+      </div>
+
+      <button class="nav-arrow next" @click="nextPaper">＞</button>
+    </div>
+
+  </div>
+</transition>
   </main>
 </template>
 
@@ -1210,6 +1404,383 @@ const getPositionClass = (index) => {
   height: 1px;
   background-color: #eee;
   margin: 0 auto 30px;
+}
+
+/* ドロップダウンの基準コンテナ */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* メニュー本体 */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  min-width: 240px;
+  overflow: hidden;
+}
+
+/* ドロップダウン項目 */
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+}
+
+.dropdown-item:not(:last-child) {
+  border-bottom: 1px solid #f9f9f9;
+}
+
+/* ドロップダウンのアニメーション */
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* --- モーダル (ライトボックス) スタイル --- */
+.paper-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.paper-modal-window {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  max-width: 1100px;
+  height: 85vh;
+}
+
+.modal-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-paper-img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.modal-counter {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* ナビゲーションボタン (＜ ＞) */
+.modal-nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: absolute;
+  z-index: 2010;
+}
+
+.modal-nav-btn:hover {
+  background: #ffffff;
+  color: #1a1a1a;
+  transform: scale(1.05);
+}
+
+.modal-nav-btn.prev { left: -20px; }
+.modal-nav-btn.next { right: -20px; }
+
+/* 閉じるボタン */
+.modal-close-btn {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.modal-close-btn:hover {
+  color: #ffffff;
+}
+
+/* モーダルのフワッとアニメーション */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.modal-fade-enter-active .paper-modal-window,
+.modal-fade-leave-active .paper-modal-window {
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+.modal-fade-enter-from .paper-modal-window {
+  transform: scale(0.95) translateY(10px);
+}
+.modal-fade-leave-to .paper-modal-window {
+  transform: scale(0.95);
+}
+
+/* 既存スタイルを維持しつつ、レスポンシブ時の調整を追加 */
+@media (max-width: 768px) {
+  .modal-nav-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+  .modal-nav-btn.prev { left: 0px; }
+  .modal-nav-btn.next { right: 0px; }
+  .modal-close-btn { top: -44px; right: 10px; }
+  .dropdown-menu { width: 100%; min-width: unset; }
+}
+
+/* ==========================================
+   🖼️ 完全画面収め・全画面モーダルビューア
+   ========================================== */
+
+/* 画面全体のオーバーレイ（背景を暗くして集中させる） */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* 暗めの透過背景 */
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* 右上の閉じるボタン */
+.modal-close-global {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  z-index: 10002;
+}
+.modal-close-global:hover {
+  opacity: 1;
+}
+
+/* ビューア全体の横並びコンテナ */
+.modal-viewer-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px; /* 必要以上に広がりすぎないように制限 */
+  gap: 30px;
+  position: relative;
+}
+
+/* 左右のナビゲーション矢印ボタン */
+.nav-arrow {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+  color: #333;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 10001;
+}
+.nav-arrow:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* 🌟 白い画像表示ステージ（これが正常に映っている時の白い四角の正体です） */
+.stage {
+  flex-grow: 1;
+  height: 80vh; /* 画面の縦80%に収める */
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px; /* 上下にカウンターとズーム用の余白を確保 */
+  box-sizing: border-box;
+  overflow: hidden; /* 初期状態でははみ出しをカット */
+}
+
+/* 🌟 画像スクローラー（初期倍率100%の時は絶対にはみ出さない） */
+.image-scroller {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* ズームしてステージをはみ出た時だけスクロールバーを出す */
+}
+
+/* 🌟 資料画像そのものの設定（コンテンツを1画面に収めるための最重要プロパティ） */
+.target-image {
+  max-width: 100%;    /* 🌟 ステージの横幅を絶対に超えない */
+  max-height: 100%;   /* 🌟 ステージの縦幅を絶対に超えない */
+  object-fit: contain; /* 縦横比を維持したまま、完全に枠内に収める */
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  background: #ffffff;
+}
+
+/* ズームコントローラー（白いステージの上部にひっそり配置） */
+.zoom-controls {
+  position: absolute;
+  top: 20px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 12px;
+  border-radius: 20px;
+  gap: 8px;
+}
+.zoom-btn {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.zoom-btn:hover {
+  opacity: 1;
+}
+.zoom-btn svg {
+  stroke: #333;
+}
+.zoom-btn.reset {
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+  padding-left: 8px;
+  margin-left: 2px;
+}
+.zoom-text {
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: #333;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* ページカウンター（白いステージの下部に固定） */
+.page-counter {
+  position: absolute;
+  bottom: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  font-family: 'Inter', monospace;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+/* フェードアニメーション */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+  .modal-viewer-container {
+    gap: 0;
+  }
+  .nav-arrow {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .nav-arrow.prev { left: -10px; }
+  .nav-arrow.next { right: -10px; }
+  .stage {
+    height: 70vh;
+    padding: 50px 20px;
+  }
 }
 
 </style>
