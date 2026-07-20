@@ -8,7 +8,27 @@ import imgTop from '@/assets/App_portfolio_top (1).png';
 import { createClient } from 'microcms-js-sdk';
 
 // ==========================================
-// 🛠️ 設計図書（資料画像）のインポート定義
+// 動画辞書データのインポート定義
+// ==========================================
+import { moviesList } from '@/data/movies.js';
+
+
+// ==========================================
+// 🎬 新規追加：動画スライド用のインデックス管理・関数
+// ==========================================
+const currentMovieIndex = ref(0);
+
+const nextMovie = () => {
+  currentMovieIndex.value = (currentMovieIndex.value + 1) % moviesList.length;
+};
+
+const prevMovie = () => {
+  currentMovieIndex.value = (currentMovieIndex.value - 1 + moviesList.length) % moviesList.length;
+};
+
+
+// ==========================================
+// 設計図書（資料画像）のインポート定義
 // ==========================================
 import clipCook0 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-1P 概要図.drawio.png';
 import clipCook1 from '@/assets/Project_Overview/Clip-Cook-paper/ClipCook-4P Django バックエンド構成.drawio.png';
@@ -34,7 +54,7 @@ const projectPapers = {
 
 
 // ==========================================
-// 🛠️ ドロップダウン ＆ モーダル制御の状態管理
+//  ドロップダウン ＆ モーダル制御の状態管理
 // ==========================================
 const openDropdown = ref(null); // 現在開いているドロップダウンのアプリ名 ('TimeWheel' or 'ClipCook')
 const isModalOpen = ref(false); // モーダルの開閉フラグ
@@ -471,6 +491,125 @@ const getPositionClass = (index) => {
           </transition>
         </div>
       </div>
+
+
+      <!--アプリの紹介（スポット参加中）: AI Avatar-->
+      <!-- 【1ブロック目：タイトルと概要】＆【2ブロック目：私のパート】 -->
+<!--アプリの紹介（スポット参加中）: AI Avatar-->
+      <!-- 【1ブロック目：タイトル・概要・MY PART】 -->
+      <div class="right ai-avatar-header-right" style="grid-column: 1 / -1;">
+        <!-- タグ類 -->
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <span class="app-tag font-featured-badge" style="margin: 0;">SPOTLIGHT PRODUCT</span>
+          <span style="font-size: 0.8rem; color: #888;">アプリの紹介（スポット参加中）</span>
+        </div>
+
+        <h3 class="app-name" style="margin-top: 0; margin-bottom: 12px;">AI Avatar</h3>
+
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">
+          開発者: 
+          <a href="https://x.com/WebDevHyper" target="_blank" rel="noopener" style="color: #1a1a1a; font-weight: 700; text-decoration: underline;">
+            Web Developer Hyper (@WebDevHyper)
+          </a>
+        </p>
+        
+        <p class="meta" style="font-size: 1.05rem; margin-bottom: 20px; line-height: 1.6;">
+          AI Avatarは、推し(自分のVRoid(VRM))が、あなたを全力で応援する無料アプリです。<br>
+          VS CodeでChrome(Edge)や動きます。アニメーションエディタつき。
+        </p>
+
+        <!-- 枠なし・左揃えの MY PART 表示 -->
+        <div style="margin-bottom: 20px;">
+          <span style="display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; color: #888; margin-bottom: 4px;">MY PART</span>
+          <p style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #1a1a1a;">
+            背景エフェクト（デザイン ＋ アニメーション）
+          </p>
+        </div>
+      </div>
+
+<!-- 【3ブロック目：見本動画のスライド（左） ＆ 実績（右）】 -->
+<div class="left">
+        <!-- 左側：動画スライドプレイヤー -->
+        <div class="video-slider-container" style="width: 200px; position: relative;">
+          
+          <!-- 🌟 動画の表示領域（枠）のサイズとアスペクト比を固定 -->
+          <div style="width: 100%; aspect-ratio: 9 / 16; height: 355px; overflow: hidden; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); background-color: #000;">
+            <video 
+              :key="moviesList[currentMovieIndex].id"
+              :src="moviesList[currentMovieIndex].videoUrl"
+              autoplay 
+              loop 
+              muted 
+              playsinline 
+              style="width: 100%; height: 100%; object-fit: cover; display: block;"
+            ></video>
+          </div>
+          
+          <!-- ミニコントローラー（位置がガタつかなくなります） -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding: 0 5px;">
+            <button @click="prevMovie" style="background: none; border: none; cursor: pointer; font-size: 0.8rem; color: #666;">◀</button>
+            <span style="font-size: 0.75rem; color: #999; font-weight: bold;">{{ currentMovieIndex + 1 }} / {{ moviesList.length }}</span>
+            <button @click="nextMovie" style="background: none; border: none; cursor: pointer; font-size: 0.8rem; color: #666;">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <!-- 右側：世界的な実績アピール -->
+        <p class="app-tag" style="animation: none; color: #1a1a1a; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 5px;">GLOBAL ACHIEVEMENT</p>
+        <p class="app-name" style="font-size: 1.25rem; margin-bottom: 8px;">DEV Community article</p>
+        <p class="meta" style="line-height: 1.6; margin-bottom: 12px;">
+          海外の主要エンジニアコミュニティ<strong>「DEV Community公式（@ThePracticalDev）」</strong>にて、<br>
+          週間最優秀記事である <strong>Top 7 Featured DEV Posts of the Week</strong> に選出されました。
+        </p>
+        <div class="action-area" style="margin-top: 0;">
+          <a href="https://x.com/ThePracticalDev/status/2075794964777205977?s=20" target="_blank" rel="noopener" class="btn-download" style="font-size: 0.8rem; padding: 6px 16px;">
+            Xを見る ↗
+          </a>
+
+
+       <!-- 【5ブロック目：インストール導線（一番下）】 -->
+      <div class="left">
+        <div style="height: 1px;"></div>
+      </div>
+      <div class="right" style="padding-top: 20px; margin-bottom: 40px;">
+        <p style="font-size: 0.8rem; color: #999; margin-bottom: 10px; font-style: italic;">＊クリックすると各ストアからインストールされます</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <a href="https://marketplace.visualstudio.com/items?itemName=web-developer-hyper.ai-avatar" target="_blank" rel="noopener" class="btn-download" style="padding: 10px 20px;">
+            App Install: VS Code版 <span>→</span>
+          </a>
+          <a href="https://chromewebstore.google.com/detail/ai-avatar/afmcfaeaaojalninahhhjnonhmlmiidi" target="_blank" rel="noopener" class="btn-download" style="padding: 10px 20px; background-color: #4285f4;">
+            App Install: Chrome (Edge)版 <span>→</span>
+          </a>
+        </div>
+      </div>
+        </div>
+      </div>
+
+      <!-- 【4ブロック目：デモ】 -->
+
+
+
+<!-- YouTube動画埋め込み部分：グリッドの制限を解除して左端から配置 -->
+<div style="grid-column: 1 / -1; width: 100%; margin-bottom: 25px;">
+        <div style="position: relative; width: 100%; padding-top: 56.25%; border-radius: 8px; overflow: hidden; background: #000;">
+          <iframe 
+            src="https://www.youtube-nocookie.com/embed/oe025rprCqM" 
+            title="AI Avatar Demo" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+ 
+
+
+
+
+
+<!-- ここまでが新規追加。以下は既存のmicroCMSループへと綺麗に繋がります -->
 
 
   <template v-for="item in contentsItems" :key="item.id">
