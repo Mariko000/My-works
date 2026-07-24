@@ -30,7 +30,7 @@ const closeMenu = () => {
     <nav class="nav-links" :class="{ 'is-open': isMenuOpen }">
       <router-link to='/' class="nav-item" @click="closeMenu">Art Projects</router-link>
       <!-- <router-link to='/Works' class="nav-item" @click="closeMenu">Art Pieces</router-link> -->
-      <router-link to='/Featured' class="nav-item" @click="closeMenu">Featured</router-link>
+      <router-link to='/Featured' class="nav-item" @click="closeMenu">Skill</router-link>
       <router-link to="/about" class="nav-item" @click="closeMenu">About</router-link>
       <router-link to='/Apps' class="nav-item" @click="closeMenu">My Apps</router-link>
       <router-link to='/EC' class="nav-item" @click="closeMenu">Online shop</router-link>

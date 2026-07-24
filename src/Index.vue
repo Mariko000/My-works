@@ -26,6 +26,50 @@ const prevMovie = () => {
   currentMovieIndex.value = (currentMovieIndex.value - 1 + moviesList.length) % moviesList.length;
 };
 
+// ==========================================
+// 📺 新規追加：YouTube動画スライダー用データ ＆ ロジック
+// ==========================================
+const portfolioVideos = ref([
+  {
+    id: 1,
+    title: 'ClipCook Demo [Shorts]',
+    appName: 'ClipCook',
+    embedUrl: 'https://www.youtube-nocookie.com/embed/Xi3yfDf6z7s',
+    isShorts: true
+  },
+  {
+    id: 2,
+    title: 'TimeWheel Overview',
+    appName: 'TimeWheel',
+    embedUrl: 'https://www.youtube-nocookie.com/embed/msRyWcp8Jg4',
+    isShorts: false
+  },
+  {
+    id: 3,
+    title: 'FitSpin Overview',
+    appName: 'FitSpin',
+    embedUrl: 'https://www.youtube-nocookie.com/embed/OE-aHDCLsXA',
+    isShorts: false
+  },
+  {
+    id: 4,
+    title: 'My Tool Overview',
+    appName: 'My tool',
+    embedUrl: 'https://www.youtube-nocookie.com/embed/Jw25bxfFVZk',
+    isShorts: false
+  }
+]);
+
+const currentYoutubeIndex = ref(0);
+
+const nextYoutube = () => {
+  currentYoutubeIndex.value = (currentYoutubeIndex.value + 1) % portfolioVideos.value.length;
+};
+
+const prevYoutube = () => {
+  currentYoutubeIndex.value = (currentYoutubeIndex.value - 1 + portfolioVideos.value.length) % portfolioVideos.value.length;
+};
+
 
 // ==========================================
 // 設計図書（資料画像）のインポート定義
@@ -489,6 +533,71 @@ const getPositionClass = (index) => {
               </button>
             </div>
           </transition>
+        </div>
+      </div>
+
+
+      <!-- 🎬 🌟 【新規追加】YouTube動画スライダーセクション（ClipCookとSPOTLIGHTの間） -->
+      <div style="grid-column: 1 / -1; width: 100%; margin: 30px 0 50px;">
+        <div style="background: #fafafa; border: 1px solid #eaeaea; border-radius: 16px; padding: 24px; text-align: center;">
+          
+          <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px;">
+            <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; color: #888; text-transform: uppercase;">
+              DEMO VIDEO : {{ portfolioVideos[currentYoutubeIndex].appName }}
+            </span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #666;">
+              {{ currentYoutubeIndex + 1 }} / {{ portfolioVideos.length }}
+            </span>
+          </div>
+
+          <!-- 埋め込みプレイヤー本体（Shortsと横長でアスペクト比を動的調整） -->
+          <div :style="{
+            position: 'relative',
+            width: portfolioVideos[currentYoutubeIndex].isShorts ? '280px' : '100%',
+            margin: '0 auto',
+            paddingTop: portfolioVideos[currentYoutubeIndex].isShorts ? '500px' : '56.25%',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            background: '#000',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.12)'
+          }">
+            <iframe 
+              :key="portfolioVideos[currentYoutubeIndex].id"
+              :src="portfolioVideos[currentYoutubeIndex].embedUrl" 
+              :title="portfolioVideos[currentYoutubeIndex].title" 
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <!-- スライドコントローラー（両端ボタン ＋ ドット） -->
+          <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;">
+            <button @click="prevYoutube" class="btn-download" style="padding: 8px 16px; font-size: 0.85rem; cursor: pointer;">
+              ◀ 前の動画
+            </button>
+            
+            <div style="display: flex; gap: 8px;">
+              <span 
+                v-for="(_, index) in portfolioVideos" 
+                :key="index"
+                @click="currentYoutubeIndex = index"
+                :style="{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: index === currentYoutubeIndex ? '#1a1a1a' : '#ccc',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s'
+                }"
+              ></span>
+            </div>
+
+            <button @click="nextYoutube" class="btn-download" style="padding: 8px 16px; font-size: 0.85rem; cursor: pointer;">
+              次の動画 ▶
+            </button>
+          </div>
+
         </div>
       </div>
 
