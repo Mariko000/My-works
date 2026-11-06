@@ -10,6 +10,8 @@
     width:100%;
 }
 
+
+
 .site-header__inner {
     display:flex;
     align-items:center;
@@ -59,8 +61,75 @@
     color:white;
     text-align:center;
 }
-main section:not(.hero) {
-    padding:80px 0;
+.reverse .about-wrap figure{
+    grid-column:2;
+    grid-row:1;
+}
+
+.reverse .about-wrap .txt-box{
+    grid-column:1;
+    grid-row:1;
+}
+
+/* card */
+.works{
+    width:100%;
+    max-width:1200px;
+    margin: 0 auto;
+}
+.strength{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:40px;
+}
+
+.card{
+    border:1px solid #d2d7ff;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+
+.card-body{
+    padding:24px;
+}
+.card figure{
+    margin:0;
+}
+
+.card img{
+    width:100%;
+    display:block;
+}
+
+
+.feature-list{
+    display:grid;
+    /* grid-template-columns:repeat(6,1fr); */
+    grid-template-columns:repeat(3, 1fr);
+    margin:0;
+}
+.feature-item{
+    padding:40px;
+     border:1px solid #cfd8e3;
+      margin:-0.5px;
+}
+
+.feature-item{
+    border-right:1px solid #cfd8e3;
+}
+
+.feature-item:last-child{
+    border-right:none;
+}
+
+.feature-item img{
+    width:100%;
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:9999px;
 }
 
 /* フッター */
@@ -103,6 +172,7 @@ footer{
 
 .content h2{
     margin:0 0 32px;   /* h2とGridの間だけ */
+    text-align:center;
 }
 
 .about-wrap{
@@ -113,7 +183,7 @@ footer{
 }
 
 .about-wrap figure{
-    margin:0;          /* ←これ重要 */
+    margin:0;
 }
 
 .about-wrap img{
@@ -203,7 +273,7 @@ footer{
         <div class="about-wrap">
 
             <figure>
-                <img src="/img/img02.webp" alt="">
+               <img src="images/image-1.png" alt="">
             </figure>
 
             <div class="txt-box">
@@ -226,7 +296,7 @@ footer{
         <div class="about-wrap">
 
             <figure>
-                <img src="/img/img02.webp" alt="">
+              <img src="images/image-1.png" alt="">
             </figure>
 
             <div class="txt-box">
@@ -239,28 +309,158 @@ footer{
     </div>
 </section>
 
-        <!-- 制作実績 -->
-        <section class="works">
+<!-- 制作実績 -->
+<section class="works">
 
-                    <div class="content">
+    <div class="content">
 
-            <!--grid 2分割  reverse -->
-            <!-- text-box -->
+        <h2>制作実績</h2>
 
-            <h2>
-                制作実績
-            </h2>
+        <h3>作れるかどうかから、一緒に考える。</h3>
 
-            <figure>
-                <img src="/img/img02.webp">
-            </figure>
-            
-            <p>説明が入ります説明が入ります説明が入ります</p>
-            <a href="button01">詳しく見る</a>
+        <p>ラフスケッチ段階からご相談いただけます。</p>
+
+        <div class="strength">
+
+    <!-- カード1 -->
+    <div class="card">
+        <figure>
+            <img src="images/image-1.png" alt="">
+        </figure>
+
+        <div class="card-body">
+            <span class="num">01</span>
+
+            <p>ホームページ制作</p>
+
+            <a href="#">詳しく見る</a>
+        </div>
+    </div>
+
+    <!-- カード2 -->
+    <div class="card">
+        <figure>
+            <img src="images/image-1.png" alt="">
+        </figure>
+
+        <div class="card-body">
+            <span class="num">02</span>
+
+            <p>ランディングページ制作</p>
+
+            <a href="#">詳しく見る</a>
+        </div>
+    </div>
+
+    <!-- カード3 -->
+    <div class="card">
+        <figure>
+            <img src="images/image-1.png" alt="">
+        </figure>
+
+        <div class="card-body">
+            <span class="num">03</span>
+
+            <p>WordPress構築</p>
+
+            <a href="#">詳しく見る</a>
+        </div>
+    </div>
+
+</div>
+
+    </div>
+
+</section>
+
+    <section class="feature">
+
+     <div class="content">
+        <h2>「どこまで作れるの？」に答えます。</h2>
+
+        <div class="feature-list">
+
+            <article class="feature-item">
+
+                <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+            <article class="feature-item">
+
+               <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+            <article class="feature-item">
+
+               <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+                       <article class="feature-item">
+
+                <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+            <article class="feature-item">
+
+               <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+            <article class="feature-item">
+
+               <h3>材料</h3>
+
+                <figure>
+                    <img src="images/image-1.png" alt="">
+                </figure>
+
+                <p>説明文...</p>
+
+            </article>
+
+        </div>
+
+        <a class="btn">詳しく見る</a>
+
             
             </div>
 
         </section>
+
 
         <section class="faq">
 
@@ -274,7 +474,7 @@ footer{
             </h2>
 
             <figure>
-                <img src="/img/img02.webp">
+                 <img src="/images/image-1.png">
             </figure>
             
             <p>説明が入ります説明が入ります説明が入ります</p>
@@ -296,7 +496,7 @@ footer{
             </h2>
 
             <figure>
-                <img src="/img/img02.webp">
+                <img src="/images/image-1.png">
             </figure>
             
             <p>説明が入ります説明が入ります説明が入ります</p>

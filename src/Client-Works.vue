@@ -10,7 +10,7 @@ const clientWorks = [
     id: 1,
     title: '新規コーポレートサイト制作',
     company: '株式会社トーシン様',
-    url: 'https://xb821908.xbiz.jp/toshin0828/',
+    url: 'https://toshin0828.com/',
     type: '新規制作 / WordPress実装',
     highlights: [
       '強みを引き出すためのインタビュー項目を作成し、コンテンツを整理・構成・ライティング',
